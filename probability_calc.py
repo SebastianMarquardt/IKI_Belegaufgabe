@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def calculate_all_probability_tables(data: pd.DataFrame, endNode: str):
+    #creating a new DataFrame for the propabiblity tables with labelled rows and columns
     propTable = pd.DataFrame(calculate_probability_data(data, endNode),
     index=['PrevDayUpUp', 'PrevDayUpDown', 'PrevDayDownUp', 'PrevDayDownDown'])
 
@@ -14,9 +15,11 @@ def calculate_all_probability_tables(data: pd.DataFrame, endNode: str):
 
 def calculate_probability_data(data: pd.DataFrame, endNode: str):
 
+    #labels for columns
     firstColumnName = "up"
     secondColumnName = "down"
 
+    #table used to fill the DataFrame later
     propData = {
         firstColumnName: [0, 0, 0, 0],
         secondColumnName: [0, 0, 0, 0] 
