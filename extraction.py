@@ -2,11 +2,14 @@ import yfinance as yf
 import pandas as pd
 
 
-def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d') -> pd.DataFrame:
+def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', start=None, end=None) -> pd.DataFrame:
     # Get all Data
     data = yf.Ticker(ticker)
     # Get only historic Data
-    hist = data.history(period=period, interval=interval, rounding=True)
+    if start is None:
+        hist = data.history(period=period, interval=interval, rounding=True)
+    else:
+        hist = data.history(interval=interval, start=start, end=end)
     # Adds Bernoulli-Trends to the Data
     hist = add_up_down_movement(hist)
     # Save Dataframe to .csv and return it
@@ -16,7 +19,7 @@ def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d') ->
 
 def add_up_down_movement(hist_data: pd.DataFrame):
     # Drop unnecessary columns
-    hist_data.drop(['High', 'Low', 'Volume', 'Dividends', 'Stock Splits'], axis=1, inplace=True)
+    hist_data.drop(['Volume', 'Dividends', 'Stock Splits'], axis=1, inplace=True)
     # Calculate absolute change and percentage during each time period
     hist_data['diff'] = hist_data['Close'] - hist_data['Open']
     hist_data['percentage_change'] = (hist_data['Close'] - hist_data['Open']) / hist_data['Open'] * 100
@@ -28,6 +31,12 @@ def add_up_down_movement(hist_data: pd.DataFrame):
     # Calculate Closing Trend in each period (compare "Close" at t(n) to "Close" at t(n-1))
     hist_data['trend_close'] = hist_data['Close'].rolling(2).apply(diff)
     hist_data['trend_close'] = hist_data.apply(lambda row: add_trend_to_row(row, 'trend_close'), axis=1)
+
+    hist_data['trend_high'] = hist_data['High'].rolling(2).apply(diff)
+    hist_data['trend_high'] = hist_data.apply(lambda row: add_trend_to_row(row, 'trend_high'), axis=1)
+
+    hist_data['trend_low'] = hist_data['Low'].rolling(2).apply(diff)
+    hist_data['trend_low'] = hist_data.apply(lambda row: add_trend_to_row(row, 'trend_low'), axis=1)
     return hist_data
 
 
