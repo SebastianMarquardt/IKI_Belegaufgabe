@@ -4,17 +4,21 @@ import pandas as pd
 
 
 def calculate_all_probability_tables(data: pd.DataFrame, endNode: str):
-    # creating a new DataFrame for the propabiblity tables with labelled rows and columns
+    # creating a new DataFrame for the probability tables with labelled rows and columns
+    # TODO not sure this index makes sense, we loose info on what is what and don't stay genera
+    #  Instead keep column names open, close, high, low
     index_columns = ['PrevDayUpUp', 'PrevDayUpDown', 'PrevDayDownUp', 'PrevDayDownDown']
     prop_table = pd.DataFrame(calculate_probability_data(data, endNode), index=index_columns)
+    prop_table['total'] = prop_table.sum(axis=1)
 
-    print(prop_table.to_string())
+    for col in prop_table.columns:
+        prop_table[col] = prop_table[col]/prop_table['total']
 
-    return prop_table
+    return prop_table.drop(columns=['total'])
 
 
 def calculate_probability_data(data: pd.DataFrame, target_col: str):
-
+    # TODO this function only makes sense for the assumptions of 'trend_open' -> either more general or more functions
     # labels for columns
     first_column_name = "up"
     second_column_name = "down"
