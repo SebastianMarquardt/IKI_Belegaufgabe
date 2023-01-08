@@ -27,8 +27,8 @@ def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
     if (complex):
         prop_table_ope, prop_table_clo = calculate_probability_complex(data)
         
-        prop_table_ope['total'] = prop_table_ope.sum(axis=1)
-        prop_table_clo['total'] = prop_table_clo.sum(axis=1)
+        prop_table_ope['total'] = prop_table_ope['up']+prop_table_ope['down']
+        prop_table_clo['total'] = prop_table_clo['up']+prop_table_clo['down']
 
         prop_table_ope['up'] = prop_table_ope['up']/prop_table_ope['total']
         prop_table_ope['down'] = prop_table_ope['down']/prop_table_ope['total']
@@ -103,7 +103,6 @@ def calculate_probability_complex(data):
     build_data_complex(prop_table_clo, data, 'trend_close')
 
     return prop_table_ope, prop_table_clo
-
 
 def build_data_complex(prop_table, data, target: str):
     for ind in range(len(data.index) - 1):
