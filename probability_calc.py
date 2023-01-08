@@ -1,4 +1,5 @@
 import pandas as pd
+pd.options.mode.chained_assignment = None
 
 complex_format = [
     ['up', 'up', 'up', 'up', 0, 0],
