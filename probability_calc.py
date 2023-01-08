@@ -1,24 +1,44 @@
 import pandas as pd
 
+complex_format = [
+    ['up', 'up', 'up', 'up', 0, 0],
+    ['up', 'up', 'up', 'down', 0, 0],
+    ['up', 'up', 'down', 'up', 0, 0],
+    ['up', 'up', 'down', 'down', 0, 0],
+    ['up', 'down', 'up', 'up', 0, 0],
+    ['up', 'down', 'up', 'down', 0, 0],
+    ['up', 'down', 'down', 'up', 0, 0],
+    ['up', 'down', 'down', 'down', 0, 0],
+    ['down', 'up', 'up', 'up', 0, 0],
+    ['down', 'up', 'up', 'down', 0, 0],
+    ['down', 'up', 'down', 'up', 0, 0],
+    ['down', 'up', 'down', 'down', 0, 0],
+    ['down', 'down', 'up', 'up', 0, 0],
+    ['down', 'down', 'up', 'down', 0, 0],
+    ['down', 'down', 'down', 'up', 0, 0],
+    ['down', 'down', 'down', 'down', 0, 0]
+]
+
 def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
 
     prop_table_ope = pd.DataFrame
     prop_table_clo = pd.DataFrame
     if (complex):
         prop_table_ope, prop_table_clo = calculate_probability_complex(data)
+        return prop_table_ope, prop_table_clo
     else:
         prop_table_ope, prop_table_clo = calculate_probability_simple(data)
 
-    prop_table_ope['total'] = prop_table_ope.sum(axis=1)
-    prop_table_clo['total'] = prop_table_clo.sum(axis=1)
+        prop_table_ope['total'] = prop_table_ope.sum(axis=1)
+        prop_table_clo['total'] = prop_table_clo.sum(axis=1)
+    
+        for col in prop_table_ope.columns:
+            prop_table_ope[col] = prop_table_ope[col]/prop_table_ope['total']
 
-    for col in prop_table_ope.columns:
-        prop_table_ope[col] = prop_table_ope[col]/prop_table_ope['total']
+        for col in prop_table_clo.columns:
+            prop_table_clo[col] = prop_table_clo[col]/prop_table_clo['total']
 
-    for col in prop_table_clo.columns:
-        prop_table_clo[col] = prop_table_clo[col]/prop_table_clo['total']
-
-    return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
+        return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
 
 def calculate_probability_simple(data: pd.DataFrame):
 
@@ -65,4 +85,29 @@ def build_data_simple(data: pd.DataFrame, target: str):
     return prop_data
 
 def calculate_probability_complex(data):
-    raise NotImplementedError
+
+    prop_table_ope = build_table_complex()
+    prop_table_clo = build_table_complex()
+
+    build_data_complex(prop_table_ope, data, 'trend_open')
+    build_data_complex(prop_table_clo, data, 'trend_close')
+
+    return prop_table_ope, prop_table_clo
+
+
+def build_data_complex(prop_table, data, target: str):
+    for ind in range(len(data.index) - 1):
+        update_entry(data, ind, target, prop_table)
+
+def update_entry(data, ind, target, prop_table):
+    for x in range(16): 
+        if data['trend_open'][ind] == complex_format[x][0] and data['trend_close'][ind] == complex_format[x][1] and data['trend_high'][ind] == complex_format[x][2] and data['trend_low'][ind] == complex_format[x][3]:
+            if data[target][ind + 1] == 'up':
+                prop_table['up'][x] = prop_table['up'][x] + 1
+            else:
+                prop_table['down'][x] = prop_table['down'][x] + 1
+
+def build_table_complex():
+    prop_table = pd.DataFrame(complex_format, columns=['PrevDayOpen','PrevDayClose','PrevDayHigh','PrevDayLow','up','down'])
+
+    return prop_table
