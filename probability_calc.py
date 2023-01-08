@@ -1,29 +1,37 @@
 import pandas as pd
 
-# TODO functionality
+def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
 
+    prop_table_ope = pd.DataFrame
+    prop_table_clo = pd.DataFrame
+    if (complex):
+        prop_table_ope, prop_table_clo = calculate_probability_complex(data)
+    else:
+        prop_table_ope, prop_table_clo = calculate_probability_simple(data)
 
-def calculate_all_probability_tables(data: pd.DataFrame, endNode: str):
-    # creating a new DataFrame for the probability tables with labelled rows and columns
-    # TODO not sure this index makes sense, we loose info on what is what and don't stay genera
-    #  Instead keep column names open, close, high, low
+    prop_table_ope['total'] = prop_table_ope.sum(axis=1)
+    prop_table_clo['total'] = prop_table_clo.sum(axis=1)
+
+    for col in prop_table_ope.columns:
+        prop_table_ope[col] = prop_table_ope[col]/prop_table_ope['total']
+
+    for col in prop_table_clo.columns:
+        prop_table_clo[col] = prop_table_clo[col]/prop_table_clo['total']
+
+    return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
+
+def calculate_probability_simple(data: pd.DataFrame):
+
     index_columns = ['PrevDayUpUp', 'PrevDayUpDown', 'PrevDayDownUp', 'PrevDayDownDown']
-    prop_table = pd.DataFrame(calculate_probability_data(data, endNode), index=index_columns)
-    prop_table['total'] = prop_table.sum(axis=1)
+    prop_table_ope = pd.DataFrame(build_data_simple(data, 'trend_open'), index=index_columns)
+    prop_table_clo = pd.DataFrame(build_data_simple(data, 'trend_close'), index=index_columns)
+    return prop_table_ope, prop_table_clo
 
-    for col in prop_table.columns:
-        prop_table[col] = prop_table[col]/prop_table['total']
+def build_data_simple(data: pd.DataFrame, target: str):
 
-    return prop_table.drop(columns=['total'])
-
-
-def calculate_probability_data(data: pd.DataFrame, target_col: str):
-    # TODO this function only makes sense for the assumptions of 'trend_open' -> either more general or more functions
-    # labels for columns
     first_column_name = "up"
     second_column_name = "down"
 
-    # table used to fill the DataFrame later
     prop_data = {
         first_column_name: [0, 0, 0, 0],
         second_column_name: [0, 0, 0, 0]
@@ -33,31 +41,28 @@ def calculate_probability_data(data: pd.DataFrame, target_col: str):
         # if prev day was open up and close up
         if data['trend_open'][ind] == 'up' and data['trend_close'][ind] == 'up':
             # check if next day was open up or close up, depending on mode
-            if data[target_col][ind + 1] == 'up':
+            if data[target][ind + 1] == 'up':
                 # add 1 to the right point of the prop data
                 prop_data[first_column_name][0] = prop_data[first_column_name][0] + 1
             else:
                 prop_data[second_column_name][0] = prop_data[second_column_name][0] + 1
         if data['trend_open'][ind] == 'up' and data['trend_close'][ind] == 'down':
-            if data[target_col][ind + 1] == 'up':
+            if data[target][ind + 1] == 'up':
                 prop_data[first_column_name][1] = prop_data[first_column_name][1] + 1
             else:
                 prop_data[second_column_name][1] = prop_data[second_column_name][1] + 1
         if data['trend_open'][ind] == 'down' and data['trend_close'][ind] == 'up':
-            if data[target_col][ind + 1] == 'up':
+            if data[target][ind + 1] == 'up':
                 prop_data[first_column_name][2] = prop_data[first_column_name][2] + 1
             else:
                 prop_data[second_column_name][2] = prop_data[second_column_name][2] + 1
         if data['trend_open'][ind] == 'down' and data['trend_close'][ind] == 'down':
-            if data[target_col][ind + 1] == 'up':
+            if data[target][ind + 1] == 'up':
                 prop_data[first_column_name][3] = prop_data[first_column_name][3] + 1
             else:
                 prop_data[second_column_name][3] = prop_data[second_column_name][3] + 1
 
     return prop_data
 
-
-def calculate_probability_table_for_col(col):
-    # Open: Depends on Previous Open and Previous Close
-    # Close: Depends on Previous Close and Current Open
+def calculate_probability_complex(data):
     raise NotImplementedError
