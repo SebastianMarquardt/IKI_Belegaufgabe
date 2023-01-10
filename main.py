@@ -11,8 +11,12 @@ if __name__ == '__main__':
     spx500_2022 = get_and_save_data("^GSPC", interval='1d', start='2022-01-01', end='2022-12-31')
 
     # TODO should calculate and return all Probability Tables
-    tab = calculate_all_probability_tables(spx500_2021, 'trend_open')
-    evaluate_model(spx500_2022, tab)
+    tab1, tab2 = calculate_all_probability_tables(spx500_2021, True)
+    print("Open table")
+    print(tab1)
+    print("Close table")
+    print(tab2)
+    #evaluate_model(spx500_2022, tab)
 
 
 
