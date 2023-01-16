@@ -20,11 +20,9 @@ complex_format = [
     ['down', 'down', 'down', 'down', 0, 0]
 ]
 
-def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
 
-    prop_table_ope = pd.DataFrame
-    prop_table_clo = pd.DataFrame
-    if (complex):
+def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
+    if complex:
         prop_table_ope, prop_table_clo = calculate_probability_complex(data)
         
         prop_table_ope['total'] = prop_table_ope['up']+prop_table_ope['down']
@@ -35,7 +33,8 @@ def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
         prop_table_clo['up'] = prop_table_clo['up']/prop_table_clo['total']
         prop_table_clo['down'] = prop_table_clo['down']/prop_table_clo['total']
         
-        return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
+        #return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
+        return prop_table_ope, prop_table_clo
     else:
         prop_table_ope, prop_table_clo = calculate_probability_simple(data)
 
