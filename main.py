@@ -10,13 +10,14 @@ if __name__ == '__main__':
     spx500_2021 = get_and_save_data("^GSPC", interval='1d', start='2021-01-01', end='2021-12-31')
     spx500_2022 = get_and_save_data("^GSPC", interval='1d', start='2022-01-01', end='2022-12-31')
 
+    complex = True
     # TODO should calculate and return all Probability Tables
-    tab1, tab2 = calculate_all_probability_tables(spx500_2021, True)
+    open_table, close_table = calculate_all_probability_tables(spx500_2021, complex)
     print("Open table")
-    print(tab1)
+    print(open_table)
     print("Close table")
-    print(tab2)
-    #evaluate_model(spx500_2022, tab)
+    print(close_table)
+    evaluate_model(spx500_2022, open_table, complex, 'open')
 
 
 
