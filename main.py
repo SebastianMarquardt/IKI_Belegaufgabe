@@ -1,6 +1,7 @@
 from extraction import get_and_save_data
 from probability_calc import calculate_all_probability_tables
 from modelling import evaluate_model
+from modelling_simple import evaluate_model_simple
 """
     Program Entry Point. This starts the Process of gathering & processing
 """
@@ -12,13 +13,18 @@ if __name__ == '__main__':
     spx500_2022 = get_and_save_data("^GSPC", interval='1d', start='2022-01-01', end='2022-12-31')
 
     # TODO should calculate and return all Probability Tables
-    open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, True)
-    open_1years, close_1years = calculate_all_probability_tables(spx500_2021, True)
-    open_preds, close_preds = evaluate_model(spx500_2022, [open_1years, close_1years])
+    open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, False)
+    open_1years, close_1years = calculate_all_probability_tables(spx500_2021, False)
+    print(open_1years)
+    print(close_1years)
+    open_preds, close_preds = evaluate_model_simple(spx500_2022, [open_1years, close_1years])
     print(open_preds)
     print(close_preds)
 
-
-
-
-
+    open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, True)
+    open_1years, close_1years = calculate_all_probability_tables(spx500_2021, True)
+    print(open_1years)
+    print(close_1years)
+    open_preds, close_preds = evaluate_model(spx500_2022, [open_1years, close_1years])
+    print(open_preds)
+    print(close_preds)
