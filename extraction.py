@@ -2,7 +2,7 @@ import yfinance as yf
 import pandas as pd
 
 
-def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', start=None, end=None) -> pd.DataFrame:
+def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', start=None, end=None, save_to_csv=False) -> pd.DataFrame:
     # Get all Data
     data = yf.Ticker(ticker)
     # Get only historic Data
@@ -10,10 +10,12 @@ def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', st
         hist = data.history(period=period, interval=interval, rounding=True)
     else:
         hist = data.history(interval=interval, start=start, end=end)
+        period = str(start) + ' to ' + str(end)
     # Adds Bernoulli-Trends to the Data
     hist = add_up_down_movement(hist)
     # Save Dataframe to .csv and return it
-    hist.to_csv(f"OHLCV_{ticker}_{period}_{interval}.csv")
+    if save_to_csv:
+        hist.to_csv(f"OHLCV_{ticker}_{period}_{interval}.csv")
     return hist
 
 
