@@ -7,6 +7,8 @@ def evaluate_model_simple(validation_data: pd.DataFrame, probability_tables: lis
     validation_data = validation_data.apply(check_predictions, axis=1)
     open_bool = validation_data['open_bool'].value_counts()
     close_bool = validation_data.close_bool.value_counts()
+    res=validation_data[['open_bool', 'close_bool']].value_counts().reset_index(name='count')
+    print(res)
     return open_bool, close_bool
 
 def get_prediction(curr: pd.Series, prob_table: pd.DataFrame):

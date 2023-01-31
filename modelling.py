@@ -10,6 +10,8 @@ def evaluate_model(validation_data: pd.DataFrame, probability_tables: list[pd.Da
     validation_data = validation_data.apply(check_predictions, axis=1)
     open_bool = validation_data['open_bool'].value_counts()
     close_bool = validation_data.close_bool.value_counts()
+    res=validation_data[['open_bool', 'close_bool']].value_counts().reset_index(name='count')
+    print(res)
     return open_bool, close_bool
 
 
