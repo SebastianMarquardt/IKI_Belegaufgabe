@@ -15,7 +15,7 @@ def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', st
     hist = add_up_down_movement(hist)
     # Save Dataframe to .csv and return it
     if save_to_csv:
-        hist.to_csv(f"OHLCV_{ticker}_{period}_{interval}.csv")
+        hist.to_csv(f"output/OHLCV_{ticker}_{period}_{interval}.csv")
     return hist
 
 

@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def evaluate_model_simple(validation_data: pd.DataFrame, probability_tables: list[pd.DataFrame]):
     for i in range(len(validation_data)-1):
         validation_data.loc[validation_data.index[i+1], 'pred_open'] = get_prediction(validation_data.iloc[i], probability_tables[0])
@@ -8,8 +9,8 @@ def evaluate_model_simple(validation_data: pd.DataFrame, probability_tables: lis
     open_bool = validation_data['open_bool'].value_counts()
     close_bool = validation_data.close_bool.value_counts()
     bool_combination_count = validation_data[['open_bool', 'close_bool']].value_counts().reset_index(name='count')
-    print(bool_combination_count)
-    return open_bool, close_bool
+    return bool_combination_count
+
 
 def get_prediction(curr: pd.Series, prob_table: pd.DataFrame):
     pred = prob_table.loc[(prob_table['trend_open'] == curr['trend_open']) &
@@ -18,6 +19,7 @@ def get_prediction(curr: pd.Series, prob_table: pd.DataFrame):
         return 'up'
     elif pred.down[0] > pred.up[0]:
         return 'down'
+
 
 def check_predictions(row: pd.Series):
     if row['pred_open'] == row['trend_open']:
