@@ -36,7 +36,7 @@ def complex_model(symbol: str, interval: str, train_start: str, train_end: str, 
                   save_csv: bool, show_plots: bool, save_plots: bool):
     training_data = get_and_save_data(symbol, interval=interval, start=train_start, end=train_end, save_to_csv=save_csv)
     val_data = get_and_save_data(symbol, interval=interval, start=val_start, end=val_end, save_to_csv=save_csv)
-    open_train, close_train = calculate_all_probability_tables(training_data, complex=True)
+    open_train, close_train = calculate_all_probability_tables(training_data, use_complex_model=True)
     if save_csv:
         open_train.to_csv(f"output/cpd_opening_price_{symbol}_{train_start}{train_end}.csv")
         close_train.to_csv(f"output/cpd_closing_price_{symbol}_{train_start}{train_end}.csv")

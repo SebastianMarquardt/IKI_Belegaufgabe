@@ -1,4 +1,5 @@
 import pandas as pd
+
 pd.options.mode.chained_assignment = None
 
 complex_format = [
@@ -21,48 +22,48 @@ complex_format = [
 ]
 
 
-def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
-    if complex:
+def calculate_all_probability_tables(data: pd.DataFrame, use_complex_model: bool):
+    if use_complex_model:
         prop_table_ope, prop_table_clo = calculate_probability_complex(data)
-        
-        prop_table_ope['total'] = prop_table_ope['up']+prop_table_ope['down']
-        prop_table_clo['total'] = prop_table_clo['up']+prop_table_clo['down']
 
-        prop_table_ope['up'] = prop_table_ope['up']/prop_table_ope['total']
-        prop_table_ope['down'] = prop_table_ope['down']/prop_table_ope['total']
-        prop_table_clo['up'] = prop_table_clo['up']/prop_table_clo['total']
-        prop_table_clo['down'] = prop_table_clo['down']/prop_table_clo['total']
-        
+        prop_table_ope['total'] = prop_table_ope['up'] + prop_table_ope['down']
+        prop_table_clo['total'] = prop_table_clo['up'] + prop_table_clo['down']
+
+        prop_table_ope['up'] = prop_table_ope['up'] / prop_table_ope['total']
+        prop_table_ope['down'] = prop_table_ope['down'] / prop_table_ope['total']
+        prop_table_clo['up'] = prop_table_clo['up'] / prop_table_clo['total']
+        prop_table_clo['down'] = prop_table_clo['down'] / prop_table_clo['total']
+
         return prop_table_ope, prop_table_clo
     else:
         prop_table_ope, prop_table_clo = calculate_probability_simple(data)
 
         prop_table_ope['total'] = prop_table_ope.sum(axis=1)
         prop_table_clo['total'] = prop_table_clo.sum(axis=1)
-        
-        prop_table_ope['up'] = prop_table_ope['up']/prop_table_ope['total']
-        prop_table_ope['down'] = prop_table_ope['down']/prop_table_ope['total']
-        
-        prop_table_clo['up'] = prop_table_clo['up']/prop_table_clo['total']
-        prop_table_clo['down'] = prop_table_clo['down']/prop_table_clo['total']
+
+        prop_table_ope['up'] = prop_table_ope['up'] / prop_table_ope['total']
+        prop_table_ope['down'] = prop_table_ope['down'] / prop_table_ope['total']
+
+        prop_table_clo['up'] = prop_table_clo['up'] / prop_table_clo['total']
+        prop_table_clo['down'] = prop_table_clo['down'] / prop_table_clo['total']
 
         prop_table_ope.insert(0, 'trend_close', ['up', 'down', 'up', 'down'])
         prop_table_ope.insert(0, 'trend_open', ['up', 'up', 'down', 'down'])
-        
+
         prop_table_clo.insert(0, 'trend_close', ['up', 'down', 'up', 'down'])
         prop_table_clo.insert(0, 'trend_open', ['up', 'up', 'down', 'down'])
 
         return prop_table_ope, prop_table_clo
 
-def calculate_probability_simple(data: pd.DataFrame):
 
+def calculate_probability_simple(data: pd.DataFrame):
     index_columns = ['PrevDayUpUp', 'PrevDayUpDown', 'PrevDayDownUp', 'PrevDayDownDown']
     prop_table_ope = pd.DataFrame(build_data_simple(data, 'trend_open'), index=index_columns)
     prop_table_clo = pd.DataFrame(build_data_simple(data, 'trend_close'), index=index_columns)
     return prop_table_ope, prop_table_clo
 
-def build_data_simple(data: pd.DataFrame, target: str):
 
+def build_data_simple(data: pd.DataFrame, target: str):
     first_column_name = "up"
     second_column_name = "down"
 
@@ -98,8 +99,8 @@ def build_data_simple(data: pd.DataFrame, target: str):
 
     return prop_data
 
-def calculate_probability_complex(data):
 
+def calculate_probability_complex(data):
     prop_table_ope = build_table_complex()
     prop_table_clo = build_table_complex()
 
@@ -108,19 +109,24 @@ def calculate_probability_complex(data):
 
     return prop_table_ope, prop_table_clo
 
+
 def build_data_complex(prop_table, data, target: str):
     for ind in range(len(data.index) - 1):
         update_entry(data, ind, target, prop_table)
 
+
 def update_entry(data, ind, target, prop_table):
-    for x in range(16): 
-        if data['trend_open'][ind] == complex_format[x][0] and data['trend_close'][ind] == complex_format[x][1] and data['trend_high'][ind] == complex_format[x][2] and data['trend_low'][ind] == complex_format[x][3]:
+    for x in range(16):
+        if data['trend_open'][ind] == complex_format[x][0] and data['trend_close'][ind] == complex_format[x][1] and \
+                data['trend_high'][ind] == complex_format[x][2] and data['trend_low'][ind] == complex_format[x][3]:
             if data[target][ind + 1] == 'up':
                 prop_table['up'][x] = prop_table['up'][x] + 1
             else:
                 prop_table['down'][x] = prop_table['down'][x] + 1
 
+
 def build_table_complex():
-    prop_table = pd.DataFrame(complex_format, columns=['PrevDayOpen','PrevDayClose','PrevDayHigh','PrevDayLow','up','down'])
+    prop_table = pd.DataFrame(complex_format,
+                              columns=['PrevDayOpen', 'PrevDayClose', 'PrevDayHigh', 'PrevDayLow', 'up', 'down'])
 
     return prop_table

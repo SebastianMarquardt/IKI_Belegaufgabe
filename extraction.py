@@ -2,7 +2,8 @@ import yfinance as yf
 import pandas as pd
 
 
-def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', start=None, end=None, save_to_csv=False) -> pd.DataFrame:
+def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', start=None, end=None,
+                      save_to_csv=False) -> pd.DataFrame:
     # Get all Data
     data = yf.Ticker(ticker)
     # Get only historic Data

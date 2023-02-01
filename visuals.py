@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def visualise_prop_tables(tables: list[pd.DataFrame], titles: list[str], save_charts: bool = True, show_chart: bool= False):
+def visualise_prop_tables(tables: list[pd.DataFrame], titles: list[str], save_charts: bool = True,
+                          show_chart: bool = True):
     for ind, tab in enumerate(tables):
         tab['abs_up'] = tab['up'] * tab['total']
         tab['abs_down'] = tab['down'] * tab['total']
@@ -10,7 +11,7 @@ def visualise_prop_tables(tables: list[pd.DataFrame], titles: list[str], save_ch
         ax = tab.plot.bar(x='label',
                           y=['abs_up', 'abs_down'],
                           stacked=True,
-                          color={"abs_up": "green", "abs_down": "red"},)
+                          color={"abs_up": "green", "abs_down": "red"}, )
         for container in ax.containers:
             ax.bar_label(container)
         plt.legend(['up', 'down'])
@@ -25,7 +26,7 @@ def visualise_prop_tables(tables: list[pd.DataFrame], titles: list[str], save_ch
         plt.show()
 
 
-def visualise_eval(table: pd.DataFrame, title: str, save_chart: bool = True, show_charts=False):
+def visualise_eval(table: pd.DataFrame, title: str, save_chart: bool = True, show_charts=True):
     table['label'] = table['open_bool'].astype(str) + '-' + table['close_bool'].astype(str)
     ax = table.plot.bar(x='label',
                         y='count')
