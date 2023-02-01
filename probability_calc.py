@@ -33,21 +33,26 @@ def calculate_all_probability_tables(data: pd.DataFrame, complex: bool):
         prop_table_clo['up'] = prop_table_clo['up']/prop_table_clo['total']
         prop_table_clo['down'] = prop_table_clo['down']/prop_table_clo['total']
         
-        #return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
         return prop_table_ope, prop_table_clo
     else:
         prop_table_ope, prop_table_clo = calculate_probability_simple(data)
 
         prop_table_ope['total'] = prop_table_ope.sum(axis=1)
         prop_table_clo['total'] = prop_table_clo.sum(axis=1)
-    
-        for col in prop_table_ope.columns:
-            prop_table_ope[col] = prop_table_ope[col]/prop_table_ope['total']
+        
+        prop_table_ope['up'] = prop_table_ope['up']/prop_table_ope['total']
+        prop_table_ope['down'] = prop_table_ope['down']/prop_table_ope['total']
+        
+        prop_table_clo['up'] = prop_table_clo['up']/prop_table_clo['total']
+        prop_table_clo['down'] = prop_table_clo['down']/prop_table_clo['total']
 
-        for col in prop_table_clo.columns:
-            prop_table_clo[col] = prop_table_clo[col]/prop_table_clo['total']
+        prop_table_ope.insert(0, 'trend_close', ['up', 'down', 'up', 'down'])
+        prop_table_ope.insert(0, 'trend_open', ['up', 'up', 'down', 'down'])
+        
+        prop_table_clo.insert(0, 'trend_close', ['up', 'down', 'up', 'down'])
+        prop_table_clo.insert(0, 'trend_open', ['up', 'up', 'down', 'down'])
 
-        return prop_table_ope.drop(columns=['total']), prop_table_clo.drop(columns=['total'])
+        return prop_table_ope, prop_table_clo
 
 def calculate_probability_simple(data: pd.DataFrame):
 

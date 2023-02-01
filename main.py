@@ -1,13 +1,13 @@
 from extraction import get_and_save_data
 from probability_calc import calculate_all_probability_tables
 from modelling import evaluate_model
+from modelling_simple import evaluate_model_simple
 from visuals import visualise_prop_tables
 
 
 def spx_example():
     spx500_2020_21 = get_and_save_data("^GSPC", interval='1d', start='2020-01-01', end='2021-12-31')
     spx500_2022 = get_and_save_data("^GSPC", interval='1d', start='2022-01-01', end='2022-12-31')
-
     open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, True)
     open_2years.to_csv(f"cpd_opening_price_spx500_2020_21.csv")
     close_2years.to_csv(f"cpd_closing_price_spx500_2020_21.csv")
@@ -34,7 +34,4 @@ def btc_example():
 if __name__ == '__main__':
     spx_example()
     btc_example()
-
-
-
 
