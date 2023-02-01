@@ -1,19 +1,17 @@
 import pandas as pd
 
 
-def evaluate_model(validation_data: pd.DataFrame, probability_tables: list[pd.DataFrame]):
+def evaluate_model(validation_data: pd.DataFrame, probability_tables: list[pd.DataFrame]) -> pd.DataFrame:
     # Make predictions, compare to actual values and return Evaluation Data
     probability_tables = rename_prop_tables(tabs=probability_tables)
     for i in range(len(validation_data)-1):
         validation_data.loc[validation_data.index[i+1], 'pred_open'] = get_prediction(validation_data.iloc[i], probability_tables[0])
         validation_data.loc[validation_data.index[i+1], 'pred_close'] = get_prediction(validation_data.iloc[i], probability_tables[1])
     validation_data = validation_data.apply(check_predictions, axis=1)
-    # TODO Better grouping
     open_bool = validation_data['open_bool'].value_counts()
     close_bool = validation_data.close_bool.value_counts()
     bool_combination_count = validation_data[['open_bool', 'close_bool']].value_counts().reset_index(name='count')
-    print(bool_combination_count)
-    return open_bool, close_bool
+    return bool_combination_count
 
 
 def get_prediction(curr: pd.Series, prob_table: pd.DataFrame):
