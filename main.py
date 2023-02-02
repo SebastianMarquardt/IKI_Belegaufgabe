@@ -1,8 +1,23 @@
+import sys
+from sys import argv
+
 from extraction import get_and_save_data
 from probability_calc import calculate_all_probability_tables
 from modelling import evaluate_model
 from modelling_simple import evaluate_model_simple
 from visuals import visualise_prop_tables, visualise_eval
+
+default_config = {
+    'symbol': '',
+    'interval': '1d',
+    'train_start': '2020-01-01',
+    'train_end': '2021-12-31',
+    'val_start': '2022-01-01',
+    'val_end': '2022-12-31',
+    'save_csv': False,
+    'show_plots': False,
+    'save_plots': True
+}
 
 
 def spx_example():
@@ -52,5 +67,33 @@ def complex_model(symbol: str, interval: str, train_start: str, train_end: str, 
     Program Entry Point. This starts the Process of gathering & processing
 """
 if __name__ == '__main__':
-    spx_example()
-    btc_example()
+    if '-examples' in argv:
+        btc_example()
+        spx_example()
+    else:
+        conf = default_config.copy()
+        for arg in argv:
+            if arg == '-h':
+                print('Usage help:')
+                sys.exit()
+            elif arg == '-s':
+                conf.symbol = arg
+            elif arg == '-i':
+                conf.interval = arg
+            elif arg == '-ts':
+                conf.train_start = arg
+            elif arg == '-te':
+                conf.train_end = arg
+            elif arg == '-vs':
+                conf.val_start = arg
+            elif arg == '-ve':
+                conf.val_end = arg
+            elif arg == '-scsv':
+                conf.save_csv = arg
+            elif arg == '-showp':
+                conf.show_plots = arg
+            elif arg == '-savep':
+                conf.save_plots = arg
+        complex_model(conf.get('symbol'), conf.get('interval'), conf.get('train_start'),
+                      conf.get('train_end'), conf.get('val_start'), conf.get('val_end'),
+                      conf.get('save_csv'), conf.get('show_plots'), conf.get('save_plots'))
