@@ -5,6 +5,7 @@ import pandas as pd
 def get_and_save_data(ticker: str, period: str = 'ytd', interval: str = '1d', start=None, end=None,
                       save_to_csv=False) -> pd.DataFrame:
     # Get all Data
+    print('Fetching Yahoo Finance data for ' + ticker + ' from ' + start + ' to ' + end)
     data = yf.Ticker(ticker)
     # Get only historic Data
     if start is None:

@@ -2,7 +2,19 @@ from extraction import get_and_save_data
 from probability_calc import calculate_all_probability_tables
 from modelling import evaluate_model
 from modelling_simple import evaluate_model_simple
-from visuals import visualise_prop_tables, visualise_eval
+from visuals import visualise_prop_tables, visualise_prop_tables_simple, visualise_eval
+
+def pfe_example():
+    spx500_2020_21 = get_and_save_data("PFE", interval='1d', start='2020-01-01', end='2021-12-31')
+    spx500_2022 = get_and_save_data("PFE", interval='1d', start='2022-01-01', end='2022-12-31')
+    open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, False)
+    open_2years.to_csv(f"output/pfizer_opening_price_2020_21.csv")
+    close_2years.to_csv(f"output/pfizer_closing_price_2020_21.csv")
+    visualise_prop_tables_simple([open_2years, close_2years], ['Distribution Table for Opening Data Pfizer',
+                                                        'Distribution Table for Close Data Pfizer'])
+    pred_eval = evaluate_model_simple(spx500_2022, [open_2years, close_2years])
+    visualise_eval(pred_eval, 'Distribution of correct&wrong predictions for Pfizer in 2022 (trained on 2020 & 2021)',
+                   True)
 
 
 def spx_example():
@@ -14,7 +26,7 @@ def spx_example():
     visualise_prop_tables([open_2years, close_2years], ['Distribution Table for Opening Data SPX 500',
                                                         'Distribution Table for Close Data SPX 500'])
     pred_eval = evaluate_model(spx500_2022, [open_2years, close_2years])
-    visualise_eval(pred_eval, 'Distribution of correct&wrong predictions for SPX500 in 2022 (trained on 2020 & 2022)',
+    visualise_eval(pred_eval, 'Distribution of correct&wrong predictions for SPX500 in 2022 (trained on 2020 & 2021)',
                    True)
 
 
@@ -28,7 +40,7 @@ def btc_example():
     visualise_prop_tables([open_2years, close_2years], ['Distribution Table for Opening Data BTC',
                                                         'Distribution Table for Close Data BTC'])
     pred_eval = evaluate_model(spx500_2022, [open_2years, close_2years])
-    visualise_eval(pred_eval, 'Distribution of correct&wrong predictions for BTC in 2022 (trained on 2020 & 2022)',
+    visualise_eval(pred_eval, 'Distribution of correct&wrong predictions for BTC in 2022 (trained on 2020 & 2021)',
                    True)
 
 
@@ -52,5 +64,6 @@ def complex_model(symbol: str, interval: str, train_start: str, train_end: str, 
     Program Entry Point. This starts the Process of gathering & processing
 """
 if __name__ == '__main__':
+    pfe_example()
     spx_example()
     btc_example()
