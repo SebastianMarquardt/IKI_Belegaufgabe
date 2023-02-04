@@ -1,7 +1,7 @@
-from IKI_Belegaufgabe.extraction import get_and_save_data
-from IKI_Belegaufgabe.modelling import evaluate_model
-from IKI_Belegaufgabe.probability_calc import calculate_all_probability_tables
-from IKI_Belegaufgabe.visuals import visualise_prop_tables, visualise_eval
+from extraction import get_and_save_data
+from modelling import evaluate_model
+from probability_calc import calculate_all_probability_tables
+from visuals import visualise_prop_tables, visualise_eval
 
 
 def spx_example():

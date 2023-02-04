@@ -7,6 +7,7 @@ from modelling_simple import evaluate_model_simple
 from visuals import visualise_prop_tables, visualise_eval
 from constants import HELP, DEFAULT_RUN_CONFIG
 from examples import btc_example, spx_example
+import argparse
 
 
 def complex_model(symbol: str, interval: str, train_start: str, train_end: str, val_start: str, val_end: str,
@@ -35,28 +36,23 @@ if __name__ == '__main__':
     else:
         # TODO split into operation and arguments to read user input
         conf = DEFAULT_RUN_CONFIG.copy()
-        for arg in argv:
-            if arg == '-h':
-                print(HELP)
-                sys.exit()
-            elif arg == '-s':
-                conf.symbol = arg
-            elif arg == '-i':
-                conf.interval = arg
-            elif arg == '-ts':
-                conf.train_start = arg
-            elif arg == '-te':
-                conf.train_end = arg
-            elif arg == '-vs':
-                conf.val_start = arg
-            elif arg == '-ve':
-                conf.val_end = arg
-            elif arg == '-scsv':
-                conf.save_csv = arg
-            elif arg == '-showp':
-                conf.show_plots = arg
-            elif arg == '-savep':
-                conf.save_plots = arg
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-s", "--symbol", help="Symbol as used in Yahoo-finance-API)", required=True)
+        parser.add_argument("-i", "--interval",
+                            help="Interval e.g. 1d|1w (For fomats check the yfinance documentation)")
+        parser.add_argument("-ts", "--train-start", help="Format YYYY-MM-DD")
+        parser.add_argument("-te", "--train_end", help="Format YYYY-MM-DD")
+        parser.add_argument("-vs", "--val_start", help="Format YYYY-MM-DD")
+        parser.add_argument("-ve", "--val_end", help="Format YYYY-MM-DD")
+        parser.add_argument("--save-csv", help="If true saves all csv files to the output folder",type=bool)
+        parser.add_argument("--show-plots", help="If true, shows the created charts during runtime", type=bool)
+        parser.add_argument("--save-plots", help="If true, save the charts to PNG ", type=bool)
+        args = vars(parser.parse_args())
+        for arg in args:
+            if args[arg] is None:
+                continue
+            else:
+                conf[arg] = args[arg]
         complex_model(conf.get('symbol'), conf.get('interval'), conf.get('train_start'),
                       conf.get('train_end'), conf.get('val_start'), conf.get('val_end'),
                       conf.get('save_csv'), conf.get('show_plots'), conf.get('save_plots'))
