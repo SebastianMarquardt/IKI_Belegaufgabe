@@ -24,6 +24,7 @@ complex_format = [
 
 def calculate_all_probability_tables(data: pd.DataFrame, use_complex_model: bool):
     if use_complex_model:
+        print('Calculating propability tables for open and close in the complex model')
         prop_table_ope, prop_table_clo = calculate_probability_complex(data)
 
         prop_table_ope['total'] = prop_table_ope['up'] + prop_table_ope['down']
@@ -36,6 +37,7 @@ def calculate_all_probability_tables(data: pd.DataFrame, use_complex_model: bool
 
         return prop_table_ope, prop_table_clo
     else:
+        print('Calculating propability tables for open and close in the simple model')      
         prop_table_ope, prop_table_clo = calculate_probability_simple(data)
 
         prop_table_ope['total'] = prop_table_ope.sum(axis=1)

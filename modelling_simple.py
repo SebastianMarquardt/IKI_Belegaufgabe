@@ -2,6 +2,7 @@ import pandas as pd
 
 
 def evaluate_model_simple(validation_data: pd.DataFrame, probability_tables: list[pd.DataFrame]):
+    print('Calculating distribution of combinations for the predictions of open and close')   
     for i in range(len(validation_data)-1):
         validation_data.loc[validation_data.index[i+1], 'pred_open'] = get_prediction(validation_data.iloc[i], probability_tables[0])
         validation_data.loc[validation_data.index[i+1], 'pred_close'] = get_prediction(validation_data.iloc[i], probability_tables[1])
