@@ -7,7 +7,7 @@ DEFAULT_RUN_CONFIG = {
     'val_end': '2022-12-31',
     'save_csv': False,
     'show_plots': False,
-    'save_plots': True
+    'save_plots': False
 }
 
 HELP = """Usage help:

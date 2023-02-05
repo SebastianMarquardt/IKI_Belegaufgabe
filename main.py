@@ -1,3 +1,4 @@
+import distutils.util
 import sys
 from sys import argv
 from extraction import get_and_save_data
@@ -5,7 +6,7 @@ from probability_calc import calculate_all_probability_tables
 from modelling import evaluate_model
 from modelling_simple import evaluate_model_simple
 from visuals import visualise_prop_tables, visualise_eval
-from constants import HELP, DEFAULT_RUN_CONFIG
+from constants import DEFAULT_RUN_CONFIG
 from examples import btc_example, spx_example
 import argparse
 
@@ -34,7 +35,6 @@ if __name__ == '__main__':
         btc_example()
         spx_example()
     else:
-        # TODO split into operation and arguments to read user input
         conf = DEFAULT_RUN_CONFIG.copy()
         parser = argparse.ArgumentParser()
         parser.add_argument("-s", "--symbol", help="Symbol as used in Yahoo-finance-API)", required=True)
@@ -44,9 +44,9 @@ if __name__ == '__main__':
         parser.add_argument("-te", "--train_end", help="Format YYYY-MM-DD")
         parser.add_argument("-vs", "--val_start", help="Format YYYY-MM-DD")
         parser.add_argument("-ve", "--val_end", help="Format YYYY-MM-DD")
-        parser.add_argument("--save-csv", help="If true saves all csv files to the output folder",type=bool)
-        parser.add_argument("--show-plots", help="If true, shows the created charts during runtime", type=bool)
-        parser.add_argument("--save-plots", help="If true, save the charts to PNG ", type=bool)
+        parser.add_argument("--save-csv", help="If true saves all csv files to the output folder", type=lambda x:bool(distutils.util.strtobool(x)))
+        parser.add_argument("--show-plots", help="If true, shows the created charts during runtime", type=lambda x:bool(distutils.util.strtobool(x)))
+        parser.add_argument("--save-plots", help="If true, save the charts to PNG ", type=lambda x:bool(distutils.util.strtobool(x)))
         args = vars(parser.parse_args())
         for arg in args:
             if args[arg] is None:
