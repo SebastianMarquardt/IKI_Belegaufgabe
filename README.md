@@ -15,8 +15,14 @@ pip install pandas
 pip install yfinance
 ```
 
-compile mit:
+Starte Skript mit Standartwerten:
 
 ```
-python3 main.py
+python3 main.py -s <Symbol>
 ```
+
+Für Hilfe:
+```
+python3 main.py -h
+```
+

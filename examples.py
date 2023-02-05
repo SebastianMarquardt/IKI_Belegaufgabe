@@ -13,10 +13,11 @@ def spx_example_simple():
     open_2years.to_csv(f"output/cpd_simple_opening_price_spx500_2020_21.csv")
     close_2years.to_csv(f"output/cpd_simple_closing_price_spx500_2020_21.csv")
     visualise_prop_tables_simple([open_2years, close_2years], ['Distribution Table for Opening Data SPX 500',
-                                                        'Distribution Table for Close Data SPX 500'])
+                                                               'Distribution Table for Close Data SPX 500'])
     pred_eval = evaluate_model_simple(spx500_2022, [open_2years, close_2years])
-    visualise_eval_simple(pred_eval, 'Distribution of correct&wrong predictions with the simple model for SPX500 in 2022 (trained on 2020 & 2022)',
-                   True)
+    visualise_eval_simple(pred_eval,
+                          'Distribution of correct&wrong predictions with the simple model for SPX500 in 2022 (trained on 2020 & 2022)',
+                          True)
 
 
 def spx_example():
@@ -29,7 +30,8 @@ def spx_example():
     visualise_prop_tables([open_2years, close_2years], ['Distribution Table for Opening Data SPX 500',
                                                         'Distribution Table for Close Data SPX 500'])
     pred_eval = evaluate_model(spx500_2022, [open_2years, close_2years])
-    visualise_eval(pred_eval, 'Distribution of correct&wrong predictions with the complex model for SPX500 in 2022 (trained on 2020 & 2022)',
+    visualise_eval(pred_eval,
+                   'Distribution of correct&wrong predictions with the complex model for SPX500 in 2022 (trained on 2020 & 2022)',
                    True)
 
 
