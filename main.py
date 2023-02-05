@@ -4,10 +4,9 @@ from sys import argv
 from extraction import get_and_save_data
 from probability_calc import calculate_all_probability_tables
 from modelling import evaluate_model
-from modelling_simple import evaluate_model_simple
 from visuals import visualise_prop_tables, visualise_eval
 from constants import DEFAULT_RUN_CONFIG
-from examples import btc_example, spx_example
+from examples import btc_example, spx_example, spx_example_simple
 import argparse
 
 
@@ -33,6 +32,7 @@ def complex_model(symbol: str, interval: str, train_start: str, train_end: str, 
 if __name__ == '__main__':
     if '-examples.py' in argv:
         btc_example()
+        spx_example_simple()
         spx_example()
     else:
         conf = DEFAULT_RUN_CONFIG.copy()
