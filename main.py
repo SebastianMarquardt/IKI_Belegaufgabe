@@ -1,5 +1,4 @@
 import distutils.util
-import sys
 from sys import argv
 from extraction import get_and_save_data
 from probability_calc import calculate_all_probability_tables
@@ -16,6 +15,7 @@ def complex_model(symbol: str, interval: str, train_start: str, train_end: str, 
     val_data = get_and_save_data(symbol, interval=interval, start=val_start, end=val_end, save_to_csv=save_csv)
     open_train, close_train = calculate_all_probability_tables(training_data, use_complex_model=True)
     if save_csv:
+        print('Saving probability tables to putput folder')
         open_train.to_csv(f"output/cpd_opening_price_{symbol}_{train_start}{train_end}.csv")
         close_train.to_csv(f"output/cpd_closing_price_{symbol}_{train_start}{train_end}.csv")
     visualise_prop_tables([open_train, close_train], [f'Distribution Table for Opening Data {symbol}',
@@ -30,7 +30,8 @@ def complex_model(symbol: str, interval: str, train_start: str, train_end: str, 
     Program Entry Point. This starts the Process of gathering & processing
 """
 if __name__ == '__main__':
-    if '-examples.py' in argv:
+    if '-examples' in argv:
+        print('Running examples')
         btc_example()
         spx_example_simple()
         spx_example()
@@ -53,6 +54,7 @@ if __name__ == '__main__':
                 continue
             else:
                 conf[arg] = args[arg]
+        print(f'Running with config {conf}')
         complex_model(conf.get('symbol'), conf.get('interval'), conf.get('train_start'),
                       conf.get('train_end'), conf.get('val_start'), conf.get('val_end'),
                       conf.get('save_csv'), conf.get('show_plots'), conf.get('save_plots'))

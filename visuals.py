@@ -21,12 +21,15 @@ def visualise_prop_tables(tables: list[pd.DataFrame], titles: list[str], save_ch
         plt.ylabel('Total')
         plt.tight_layout()
         if save_charts:
+            print('Saving probability charts to output folder')
             plt.savefig(f"output/{titles[ind].replace(' ', '')}.png")
     if show_chart:
+        print('Showing probability charts. Close the window to continue execution')
         plt.show()
 
+
 def visualise_prop_tables_simple(tables: list[pd.DataFrame], titles: list[str], save_charts: bool = True,
-                          show_chart: bool = True):
+                                 show_chart: bool = True):
     for ind, tab in enumerate(tables):
         tab['abs_up'] = tab['up'] * tab['total']
         tab['abs_down'] = tab['down'] * tab['total']
@@ -44,9 +47,12 @@ def visualise_prop_tables_simple(tables: list[pd.DataFrame], titles: list[str], 
         plt.ylabel('Total')
         plt.tight_layout()
         if save_charts:
+            print('Saving probability charts to output folder')
             plt.savefig(f"output/simple_{titles[ind].replace(' ', '')}.png")
     if show_chart:
+        print('Showing probability charts. Close the window to continue execution')
         plt.show()
+
 
 def visualise_eval(table: pd.DataFrame, title: str, save_chart: bool = True, show_charts=True):
     table['label'] = table['open_bool'].astype(str) + '-' + table['close_bool'].astype(str)
@@ -58,8 +64,10 @@ def visualise_eval(table: pd.DataFrame, title: str, save_chart: bool = True, sho
     plt.xlabel('Correct (Open-Close)')
     plt.ylabel('Total')
     if save_chart:
+        print('Saving evaluation chart to output folder')
         plt.savefig(f"output/{title.replace(' ', '')}.png")
     if show_charts:
+        print('Showing evaluation chart. Close the window to continue execution')
         plt.show()
 
 
@@ -73,6 +81,8 @@ def visualise_eval_simple(table: pd.DataFrame, title: str, save_chart: bool = Tr
     plt.xlabel('Correct (Open-Close)')
     plt.ylabel('Total')
     if save_chart:
+        print('Saving evaluation chart to output folder')
         plt.savefig(f"output/simple_{title.replace(' ', '')}.png")
     if show_charts:
+        print('Showing evaluation chart. Close the window to continue execution')
         plt.show()

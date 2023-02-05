@@ -6,6 +6,7 @@ from modelling_simple import evaluate_model_simple
 
 
 def spx_example_simple():
+    print('Running SPX500 example with simple Modell')
     spx500_2020_21 = get_and_save_data("^GSPC", interval='1d', start='2020-01-01', end='2021-12-31')
     spx500_2022 = get_and_save_data("^GSPC", interval='1d', start='2022-01-01', end='2022-12-31')
     open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, False)
@@ -19,6 +20,7 @@ def spx_example_simple():
 
 
 def spx_example():
+    print('Running SPX500 example')
     spx500_2020_21 = get_and_save_data("^GSPC", interval='1d', start='2020-01-01', end='2021-12-31')
     spx500_2022 = get_and_save_data("^GSPC", interval='1d', start='2022-01-01', end='2022-12-31')
     open_2years, close_2years = calculate_all_probability_tables(spx500_2020_21, True)
@@ -32,6 +34,7 @@ def spx_example():
 
 
 def btc_example():
+    print('Running BTC-USD example')
     btc_2020_21 = get_and_save_data("BTC-USD", interval='1d', start='2020-01-01', end='2021-12-31')
     btc_2022 = get_and_save_data("BTC-USD", interval='1d', start='2022-01-01', end='2022-12-31')
 
