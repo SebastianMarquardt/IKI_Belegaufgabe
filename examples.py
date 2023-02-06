@@ -16,8 +16,8 @@ def spx_example_simple():
                                                                'Distribution Table for Close Data SPX 500'])
     pred_eval = evaluate_model_simple(spx500_2022, [open_2years, close_2years])
     visualise_eval_simple(pred_eval,
-                          'Distribution of correct&wrong predictions with the simple model for SPX500 in 2022 (trained on 2020 & 2022)',
-                          True)
+                          'Distribution of correct&wrong predictions with the simple model for SPX500 in 2022 '
+                          '(trained on 2020 & 2022)', True)
 
 
 def spx_example():
@@ -31,8 +31,8 @@ def spx_example():
                                                         'Distribution Table for Close Data SPX 500'])
     pred_eval = evaluate_model(spx500_2022, [open_2years, close_2years])
     visualise_eval(pred_eval,
-                   'Distribution of correct&wrong predictions with the complex model for SPX500 in 2022 (trained on 2020 & 2022)',
-                   True)
+                   'Distribution of correct&wrong predictions with the complex model for SPX500 in 2022 '
+                   '(trained on 2020 & 2022)', True)
 
 
 def btc_example():

@@ -6,8 +6,10 @@ def evaluate_model(validation_data: pd.DataFrame, probability_tables: list[pd.Da
     print('Calculating distribution of combinations for the predictions of open and close')   
     probability_tables = rename_prop_tables(tabs=probability_tables)
     for i in range(len(validation_data)-1):
-        validation_data.loc[validation_data.index[i+1], 'pred_open'] = get_prediction(validation_data.iloc[i], probability_tables[0])
-        validation_data.loc[validation_data.index[i+1], 'pred_close'] = get_prediction(validation_data.iloc[i], probability_tables[1])
+        validation_data.loc[validation_data.index[i+1], 'pred_open'] = get_prediction(validation_data.iloc[i],
+                                                                                      probability_tables[0])
+        validation_data.loc[validation_data.index[i+1], 'pred_close'] = get_prediction(validation_data.iloc[i],
+                                                                                       probability_tables[1])
     validation_data = validation_data.apply(check_predictions, axis=1)
     open_bool = validation_data['open_bool'].value_counts()
     close_bool = validation_data.close_bool.value_counts()
