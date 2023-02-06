@@ -13,6 +13,7 @@ Danach libs installieren:
 ```
 pip install pandas
 pip install yfinance
+pip install matplotlib
 ```
 
 Starte Skript mit Standartwerten:
